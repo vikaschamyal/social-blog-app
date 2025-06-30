@@ -2,7 +2,7 @@ import { BASE_URL } from "../config";
 
 const signup = async (user) => {
   try {
-    const res = await fetch(BASE_URL + "api/users/register", {
+    const res = await fetch(BASE_URL + "/api/users/register", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -18,7 +18,7 @@ const signup = async (user) => {
 
 const login = async (user) => {
   try {
-    const res = await fetch(BASE_URL + "api/users/login", {
+    const res = await fetch(BASE_URL + "/api/users/login", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -34,7 +34,7 @@ const login = async (user) => {
 
 const getUser = async (params) => {
   try {
-    const res = await fetch(BASE_URL + "api/users/" + params.id);
+    const res = await fetch(BASE_URL + "/api/users/" + params.id);
     return res.json();
   } catch (err) {
     console.log(err);
@@ -44,7 +44,7 @@ const getUser = async (params) => {
 const getRandomUsers = async (query) => {
   try {
     const res = await fetch(
-      BASE_URL + "api/users/random?" + new URLSearchParams(query)
+      BASE_URL + "/api/users/random?" + new URLSearchParams(query)
     );
     return res.json();
   } catch (err) {
@@ -54,7 +54,7 @@ const getRandomUsers = async (query) => {
 
 const updateUser = async (user, data) => {
   try {
-    const res = await fetch(BASE_URL + "api/users/" + user._id, {
+    const res = await fetch(BASE_URL + "/api/users/" + user._id, {
       method: "PATCH",
       headers: {
         Accept: "application/json",
