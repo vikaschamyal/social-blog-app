@@ -38,6 +38,8 @@ const SignupView = () => {
     if (Object.keys(errors).length !== 0) return;
 
     const data = await signup(formData);
+    
+    console.log(data);
 
     if (data.error) {
       setServerError(data.error);

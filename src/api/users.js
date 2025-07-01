@@ -2,7 +2,11 @@ import { BASE_URL } from "../config";
 
 const signup = async (user) => {
   try {
-    const res = await fetch(BASE_URL + "/api/users/register", {
+
+    console.log("🧾 Sending user payload:", user);// Log the user object to see what is being sent
+
+
+    const res = await fetch(BASE_URL+"/api/users/register", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -10,14 +14,23 @@ const signup = async (user) => {
       },
       body: JSON.stringify(user),
     });
+    
     return await res.json();
+
+    console.log("📩 Response:", data); // 👈 Add this
+    return data;
+    
+    
   } catch (err) {
     console.log(err);
   }
 };
 
+
 const login = async (user) => {
   try {
+    console.log("🧾 Sending login payload:", user); // 👈
+
     const res = await fetch(BASE_URL + "/api/users/login", {
       method: "POST",
       headers: {
@@ -27,6 +40,10 @@ const login = async (user) => {
       body: JSON.stringify(user),
     });
     return await res.json();
+
+    console.log("📩 Response:", data); // 👈
+    return data;
+
   } catch (err) {
     console.log(err);
   }

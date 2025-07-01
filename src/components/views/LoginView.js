@@ -32,6 +32,8 @@ const LoginView = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    console.log("📤 Logging in with:", formData); // 👈 Add this
 
     const data = await login(formData);
     if (data.error) {
