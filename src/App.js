@@ -71,6 +71,15 @@ function AppContent() {
           <Route path="/login" element={<LoginView />} />
           <Route path="/signup" element={<SignupView />} />
           <Route
+            path="/about"
+            element={
+              
+                <AboutSettings />
+
+            }
+          />
+
+          <Route
             path="/games"
             element={
               <PrivateRoute>
@@ -87,14 +96,7 @@ function AppContent() {
               </PrivateRoute>
             }
           />
-          <Route
-            path="/settings/about"
-            element={
-              <PrivateRoute>
-                <AboutSettings />
-              </PrivateRoute>
-            }
-          />
+          
           <Route
             path="/settings/contact"
             element={
