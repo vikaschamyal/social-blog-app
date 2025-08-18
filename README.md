@@ -118,4 +118,4 @@ yarn start
 Open the app
 Visit http://localhost:3000
 
-Ensure the backend API & Socket.IO server are running to support real-time messaging and posts.
+Ensure the backend API & Socket.IO server are running to support real-time messaging and postss.
