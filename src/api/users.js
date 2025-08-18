@@ -37,7 +37,7 @@ const login = async (user) => {
       body: JSON.stringify(user),
     });
 
-    const data = await res.json();
+    const data = await res.json(); // ✅ declare data
     console.log("📩 Login Response:", data);
     return data;
   } catch (err) {
@@ -46,11 +46,11 @@ const login = async (user) => {
   }
 };
 
-// Get single user
+// Get user
 const getUser = async (params) => {
   try {
     const res = await fetch(BASE_URL + "/api/users/" + params.id);
-    const data = await res.json();
+    const data = await res.json(); // ✅ declare data
     return data;
   } catch (err) {
     console.error(err);
@@ -64,7 +64,7 @@ const getRandomUsers = async (query) => {
     const res = await fetch(
       BASE_URL + "/api/users/random?" + new URLSearchParams(query)
     );
-    const data = await res.json();
+    const data = await res.json(); // ✅ declare data
     return data;
   } catch (err) {
     console.error(err);
@@ -85,7 +85,7 @@ const updateUser = async (user, updateData) => {
       body: JSON.stringify(updateData),
     });
 
-    const data = await res.json();
+    const data = await res.json(); // ✅ declare data
     return data;
   } catch (err) {
     console.error(err);
