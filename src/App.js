@@ -1,19 +1,19 @@
+// App.js
 import "@mui/material";
 import "react-icons";
 import "react-icons/bi";
 import "react-icons/md";
 import "react-icons/bs";
 import "react-router-dom";
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, Box } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-
 import {
   BrowserRouter,
   Route,
   Routes,
-  useParams,
-  useSearchParams,
+  useLocation,
 } from "react-router-dom";
+
 import theme from "./theme";
 
 import PostView from "./components/views/PostView";
@@ -30,21 +30,23 @@ import SettingsView from "./components/views/SettingsView";
 import AboutSettings from "./components/views/AboutSettings";
 import ContactSettings from "./components/views/ContactSettings";
 import DeveloperSettings from "./components/views/DeveloperSettings";
-// import HelpSupport from "./components/views/HelpSupport";
 import UserProfileSettings from "./components/views/UserProfileSettings";
 
-import { initiateSocketConnection, socket } from "./helpers/socketHelper";
-import { useEffect } from "react";
-import { BASE_URL } from "./config";
-import { io } from "socket.io-client";
+import Footer from "./components/Footer"; // 👈 import Footer
 
-function App() {
-  initiateSocketConnection();
+import { initiateSocketConnection } from "./helpers/socketHelper";
+
+// Wrapper so we can use `useLocation` inside App
+function AppContent() {
+  const location = useLocation();
+
+  // Hide footer on login & signup
+  const hideFooter =
+    location.pathname === "/login" || location.pathname === "/signup";
 
   return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <CssBaseline />
+    <Box display="flex" flexDirection="column" minHeight="100vh">
+      <Box flex="1">
         <Routes>
           <Route path="/" element={<ExploreView />} />
           <Route path="/posts/:id" element={<PostView />} />
@@ -116,8 +118,24 @@ function App() {
                 <UserProfileSettings />
               </PrivateRoute>
             }
-          /> 
+          />
         </Routes>
+      </Box>
+
+      {/* Footer visible on all pages except login/signup */}
+      {!hideFooter && <Footer />}
+    </Box>
+  );
+}
+
+function App() {
+  initiateSocketConnection();
+
+  return (
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <CssBaseline />
+        <AppContent />
       </BrowserRouter>
     </ThemeProvider>
   );

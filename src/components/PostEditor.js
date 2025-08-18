@@ -5,10 +5,10 @@ import {
   TextField,
   Typography,
   Box,
-  Paper,
   Divider,
   IconButton,
   CircularProgress,
+  useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "../api/posts";
@@ -20,6 +20,7 @@ import { MdClose, MdPostAdd } from "react-icons/md";
 import { useState } from "react";
 
 const PostEditor = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -54,22 +55,43 @@ const PostEditor = () => {
   };
 
   const handleCancel = () => {
-    navigate(-1); // Go back to previous page
+    navigate(-1);
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
+    <Card
+      elevation={4}
+      sx={{
+        p: 3.5,
+        borderRadius: 1,
+        boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+        backgroundColor: theme.palette.background.paper,
+      }}
+    >
       <Stack spacing={3}>
         {/* Header Section */}
         <HorizontalStack justifyContent="space-between" alignItems="center">
           <HorizontalStack spacing={2} alignItems="center">
-            <UserAvatar width={45} height={45} username={user.username} />
-            <Typography variant="h6" fontWeight="bold">
-              Create New Post
-            </Typography>
+            <UserAvatar width={48} height={48} username={user.username} />
+            <Box>
+              <Typography variant="h6" fontWeight={700}>
+                Create New Post
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Share your thoughts with the community
+              </Typography>
+            </Box>
           </HorizontalStack>
-          <IconButton onClick={handleCancel} size="small">
-            <MdClose size={20} />
+          <IconButton
+            onClick={handleCancel}
+            size="small"
+            sx={{
+              "&:hover": {
+                backgroundColor: theme.palette.action.hover,
+              },
+            }}
+          >
+            <MdClose size={22} />
           </IconButton>
         </HorizontalStack>
 
@@ -87,9 +109,12 @@ const PostEditor = () => {
               onChange={handleChange}
               error={!!errors.title}
               helperText={errors.title}
-              placeholder="What's your post about?"
+              placeholder="Give your post a short catchy title..."
               InputProps={{
-                sx: { borderRadius: 2 }
+                sx: {
+                  borderRadius: 2,
+                  fontWeight: 500,
+                },
               }}
             />
 
@@ -104,9 +129,12 @@ const PostEditor = () => {
               onChange={handleChange}
               error={!!errors.content}
               helperText={errors.content}
-              placeholder="Share your thoughts..."
+              placeholder="Write your thoughts, story, or update here..."
               InputProps={{
-                sx: { borderRadius: 2 }
+                sx: {
+                  borderRadius: 2,
+                  lineHeight: 1.6,
+                },
               }}
             />
 
@@ -118,8 +146,10 @@ const PostEditor = () => {
                 onClick={handleCancel}
                 sx={{
                   px: 3,
+                  py: 1,
                   borderRadius: 2,
                   textTransform: "none",
+                  fontWeight: 500,
                 }}
               >
                 Cancel
@@ -137,9 +167,14 @@ const PostEditor = () => {
                 }
                 sx={{
                   px: 3,
+                  py: 1,
                   borderRadius: 2,
                   textTransform: "none",
-                  fontWeight: "bold",
+                  fontWeight: 600,
+                  boxShadow: "0 3px 10px rgba(124,58,237,0.25)",
+                  "&:hover": {
+                    boxShadow: "0 5px 14px rgba(124,58,237,0.35)",
+                  },
                 }}
               >
                 {loading ? "Publishing..." : "Publish Post"}
@@ -148,7 +183,7 @@ const PostEditor = () => {
           </Stack>
         </Box>
       </Stack>
-    </Paper>
+    </Card>
   );
 };
 
