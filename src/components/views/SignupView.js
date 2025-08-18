@@ -1,25 +1,33 @@
 import {
+  Alert,
   Button,
   Container,
   Stack,
   TextField,
   Typography,
-  Link,
-  Alert,
+  Paper,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import { signup } from "../../api/users";
 import { loginUser } from "../../helpers/authHelper";
-import { useNavigate } from "react-router-dom";
-import Copyright from "../Copyright";
-import ErrorAlert from "../ErrorAlert";
+import { useNavigate, Link } from "react-router-dom";
 import { isLength, isEmail, contains } from "validator";
+import Copyright from "../Copyright";
+
+import PersonIcon from "@mui/icons-material/Person";
+import EmailIcon from "@mui/icons-material/Email";
+import LockIcon from "@mui/icons-material/Lock";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const SignupView = () => {
   const navigate = useNavigate();
   const [serverError, setServerError] = useState("");
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -38,8 +46,6 @@ const SignupView = () => {
     if (Object.keys(errors).length !== 0) return;
 
     const data = await signup(formData);
-    
-    console.log(data);
 
     if (data.error) {
       setServerError(data.error);
@@ -57,7 +63,7 @@ const SignupView = () => {
     }
 
     if (contains(formData.username, " ")) {
-      errors.username = "Must contain only valid characters";
+      errors.username = "Must not contain spaces";
     }
 
     if (!isLength(formData.password, { min: 8 })) {
@@ -69,71 +75,120 @@ const SignupView = () => {
     }
 
     setErrors(errors);
-
     return errors;
   };
 
   return (
-    <Container maxWidth={"xs"} sx={{ mt: { xs: 2, md: 6 } }}>
-      <Stack alignItems="center">
-        <Typography variant="h2" color="text.secondary" sx={{ mb: 6 }}>
-          <Link to="/" color="inherit" underline="none">
+    <Container maxWidth="sm">
+      <Paper
+        elevation={6}
+        sx={{
+          p: 4,
+          mt: 8,
+          borderRadius: 3,
+          backgroundColor: "background.paper",
+        }}
+      >
+        <Stack alignItems="center" spacing={2}>
+          <Typography variant="h4" fontWeight="bold">
             ChatLog
-          </Link>
-        </Typography>
-        <Typography variant="h5" gutterBottom>
-          Sign Up
-        </Typography>
-        <Typography color="text.secondary">
-          Already have an account? <Link to="/login">Login</Link>
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit}>
+          </Typography>
+          <Typography variant="h6" color="text.secondary">
+            Create your account 🚀
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Already have an account?{" "}
+            <Link to="/login" style={{ textDecoration: "none" }}>
+              Login
+            </Link>
+          </Typography>
+        </Stack>
+
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <TextField
             label="Username"
             fullWidth
             margin="normal"
-            autoFocus
             required
-            id="username"
             name="username"
             onChange={handleChange}
-            error={errors.username !== undefined}
+            error={!!errors.username}
             helperText={errors.username}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <PersonIcon color="action" />
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             label="Email Address"
             fullWidth
             margin="normal"
-            autoComplete="email"
             required
-            id="email"
             name="email"
             onChange={handleChange}
-            error={errors.email !== undefined}
+            error={!!errors.email}
             helperText={errors.email}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <EmailIcon color="action" />
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             label="Password"
             fullWidth
-            required
             margin="normal"
-            autoComplete="password"
-            id="password"
+            required
             name="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             onChange={handleChange}
-            error={errors.password !== undefined}
+            error={!!errors.password}
             helperText={errors.password}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockIcon color="action" />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    edge="end"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
-          <ErrorAlert error={serverError} />
-          <Button type="submit" fullWidth variant="contained" sx={{ my: 2 }}>
+
+          {serverError && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {serverError}
+            </Alert>
+          )}
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            size="large"
+            sx={{ mt: 3, py: 1.5, borderRadius: 2 }}
+          >
             Sign Up
           </Button>
         </Box>
-        <Box sx={{ mt: 3 }}>
+
+        <Box sx={{ mt: 4, textAlign: "center" }}>
           <Copyright />
         </Box>
-      </Stack>
+      </Paper>
     </Container>
   );
 };

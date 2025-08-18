@@ -1,20 +1,26 @@
 import {
   Alert,
   Button,
-  Checkbox,
   Container,
-  FormControlLabel,
   Stack,
   TextField,
   Typography,
+  Paper,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../api/users";
-import ErrorAlert from "../ErrorAlert";
 import { loginUser } from "../../helpers/authHelper";
+import ErrorAlert from "../ErrorAlert";
 import Copyright from "../Copyright";
+
+import EmailIcon from "@mui/icons-material/Email";
+import LockIcon from "@mui/icons-material/Lock";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const LoginView = () => {
   const navigate = useNavigate();
@@ -25,6 +31,7 @@ const LoginView = () => {
   });
 
   const [serverError, setServerError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,8 +39,8 @@ const LoginView = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    console.log("📤 Logging in with:", formData); // 👈 Add this
+
+    console.log("📤 Logging in with:", formData);
 
     const data = await login(formData);
     if (data.error) {
@@ -45,51 +52,95 @@ const LoginView = () => {
   };
 
   return (
-    <Container maxWidth={"xs"} sx={{ mt: 6 }}>
-      <Stack alignItems="center">
-        <Typography variant="h2" color="text.secondary" sx={{ mb: 6 }}>
-          <Link to="/" color="inherit" >
-          ChatLog
-          </Link>
-        </Typography>
-        <Typography variant="h5" gutterBottom>
-          Login
-        </Typography>
-        <Typography color="text.secondary">
-          Don't have an account yet? <Link to="/signup">Sign Up</Link>
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit}>
+    <Container maxWidth="sm">
+      <Paper
+        elevation={6}
+        sx={{
+          p: 4,
+          mt: 10,
+          borderRadius: 3,
+          backgroundColor: "background.paper",
+        }}
+      >
+        <Stack alignItems="center" spacing={2}>
+          <Typography variant="h4" fontWeight="bold" gutterBottom>
+            ChatLog
+          </Typography>
+          <Typography variant="h6" color="text.secondary">
+            Welcome back 👋
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Don’t have an account?{" "}
+            <Link to="/signup" style={{ textDecoration: "none" }}>
+              Sign Up
+            </Link>
+          </Typography>
+        </Stack>
+
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <TextField
             label="Email Address"
             fullWidth
             margin="normal"
-            autoComplete="email"
-            autoFocus
             required
-            id="email"
             name="email"
             onChange={handleChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <EmailIcon color="action" />
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             label="Password"
             fullWidth
             required
             margin="normal"
-            id="password  "
             name="password"
+            type={showPassword ? "text" : "password"}
             onChange={handleChange}
-            type="password"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockIcon color="action" />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    edge="end"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
 
-          <ErrorAlert error={serverError} />
-          <Button type="submit" fullWidth variant="contained" sx={{ my: 2 }}>
+          {serverError && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {serverError}
+            </Alert>
+          )}
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            size="large"
+            sx={{ mt: 3, py: 1.5, borderRadius: 2 }}
+          >
             Login
           </Button>
         </Box>
-        <Box sx={{ mt: 3 }}>
+
+        <Box sx={{ mt: 4, textAlign: "center" }}>
           <Copyright />
         </Box>
-      </Stack>
+      </Paper>
     </Container>
   );
 };

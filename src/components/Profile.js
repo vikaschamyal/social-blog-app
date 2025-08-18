@@ -6,13 +6,13 @@ import {
   Divider,
   Stack,
   Typography,
+  Box,
+  Paper,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { isLoggedIn } from "../helpers/authHelper";
 import ContentUpdateEditor from "./ContentUpdateEditor";
-import Footer from "./Footer";
 import Loading from "./Loading";
 import UserAvatar from "./UserAvatar";
 import HorizontalStack from "./util/HorizontalStack";
@@ -30,62 +30,110 @@ const Profile = (props) => {
   }, [props.profile]);
 
   return (
-    <Card>
+    <Card
+      elevation={4}
+      sx={{
+        borderRadius: 4,
+        overflow: "hidden",
+        mb: 4,
+        backgroundColor: "background.paper",
+      }}
+    >
       {user ? (
-        <Stack alignItems="center" spacing={2}>
-          <Box my={1}>
-            <UserAvatar width={150} height={150} username={user.username} />
-          </Box>
+        <>
+          {/* Banner Section */}
+          <Box
+            sx={{
+              height: 140,
+              background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+            }}
+          />
 
-          <Typography variant="h5">{user.username}</Typography>
+          <Stack alignItems="center" spacing={2} sx={{ p: 3, mt: -9 }}>
+            {/* Avatar */}
+            <UserAvatar
+              width={120}
+              height={120}
+              username={user.username}
+              sx={{
+                border: "4px solid white",
+                boxShadow: 3,
+                borderRadius: "50%",
+              }}
+            />
 
-          {props.editing ? (
-            <Box>
+            {/* Username */}
+            <Typography variant="h5" fontWeight="bold">
+              {user.username}
+            </Typography>
+
+            {/* Bio Section */}
+            {props.editing ? (
               <ContentUpdateEditor
                 handleSubmit={props.handleSubmit}
                 originalContent={user.biography}
                 validate={props.validate}
               />
-            </Box>
-          ) : user.biography ? (
-            <Typography textAlign="center" variant="p">
-              <b>Bio: </b>
-              {user.biography}
-            </Typography>
-          ) : (
-            <Typography variant="p">
-              <i>No bio yet</i>
-            </Typography>
-          )}
+            ) : (
+              <Paper
+                variant="outlined"
+                sx={{
+                  p: 2,
+                  textAlign: "center",
+                  maxWidth: 400,
+                  backgroundColor: "background.default",
+                }}
+              >
+                <Typography variant="body1" color="text.primary">
+                  {user.biography ? (
+                    <>
+                      <b>Bio: </b>
+                      {user.biography}
+                    </>
+                  ) : (
+                    <i>No bio yet</i>
+                  )}
+                </Typography>
+              </Paper>
+            )}
 
-          {currentUser && user._id === currentUser.userId && (
-            <Box>
+            {/* Action Buttons */}
+            {currentUser && user._id === currentUser.userId && (
               <Button
                 startIcon={<AiFillEdit color={iconColor} />}
+                variant="outlined"
                 onClick={props.handleEditing}
+                sx={{ mt: 2 }}
               >
-                {props.editing ? <>Cancel</> : <>Edit bio</>}
+                {props.editing ? "Cancel" : "Edit bio"}
               </Button>
-            </Box>
-          )}
+            )}
 
-          {currentUser && user._id !== currentUser.userId && (
-            <Button variant="outlined" onClick={props.handleMessage}>
-              Message
-            </Button>
-          )}
+            {currentUser && user._id !== currentUser.userId && (
+              <Button
+                variant="contained"
+                size="small"
+                onClick={props.handleMessage}
+                sx={{ mt: 2, px: 3, borderRadius: 2 }}
+              >
+                Message
+              </Button>
+            )}
 
-          <HorizontalStack>
-            <Typography color="text.secondary">
-              Likes <b>{props.profile.posts.likeCount}</b>
-            </Typography>
-            <Typography color="text.secondary">
-              Posts <b>{props.profile.posts.count}</b>
-            </Typography>
-          </HorizontalStack>
-        </Stack>
+            {/* Stats Section */}
+            <Divider flexItem sx={{ my: 2 }} />
+            <HorizontalStack spacing={4}>
+              <Typography color="text.secondary">
+                <b>{props.profile.posts.likeCount}</b> Likes
+              </Typography>
+              <Typography color="text.secondary">
+                <b>{props.profile.posts.count}</b> Posts
+              </Typography>
+            </HorizontalStack>
+          </Stack>
+        </>
       ) : (
-        <Loading label="Loading profile" />
+        <Loading label="Loading profile..." />
       )}
     </Card>
   );
