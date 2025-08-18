@@ -1,12 +1,11 @@
 import { BASE_URL } from "../config";
 
+// Signup
 const signup = async (user) => {
   try {
+    console.log("🧾 Sending user payload:", user);
 
-    console.log("🧾 Sending user payload:", user);// Log the user object to see what is being sent
-
-
-    const res = await fetch(BASE_URL+"/api/users/register", {
+    const res = await fetch(BASE_URL + "/api/users/register", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -14,22 +13,20 @@ const signup = async (user) => {
       },
       body: JSON.stringify(user),
     });
-    
-    return await res.json();
 
-    console.log("📩 Response:", data); // 👈 Add this
+    const data = await res.json(); // ✅ declare data
+    console.log("📩 Signup Response:", data);
     return data;
-    
-    
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    throw err;
   }
 };
 
-
+// Login
 const login = async (user) => {
   try {
-    console.log("🧾 Sending login payload:", user); // 👈
+    console.log("🧾 Sending login payload:", user);
 
     const res = await fetch(BASE_URL + "/api/users/login", {
       method: "POST",
@@ -39,37 +36,44 @@ const login = async (user) => {
       },
       body: JSON.stringify(user),
     });
-    return await res.json();
 
-    console.log("📩 Response:", data); // 👈
+    const data = await res.json();
+    console.log("📩 Login Response:", data);
     return data;
-
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    throw err;
   }
 };
 
+// Get single user
 const getUser = async (params) => {
   try {
     const res = await fetch(BASE_URL + "/api/users/" + params.id);
-    return res.json();
+    const data = await res.json();
+    return data;
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    throw err;
   }
 };
 
+// Get random users
 const getRandomUsers = async (query) => {
   try {
     const res = await fetch(
       BASE_URL + "/api/users/random?" + new URLSearchParams(query)
     );
-    return res.json();
+    const data = await res.json();
+    return data;
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    throw err;
   }
 };
 
-const updateUser = async (user, data) => {
+// Update user
+const updateUser = async (user, updateData) => {
   try {
     const res = await fetch(BASE_URL + "/api/users/" + user._id, {
       method: "PATCH",
@@ -78,11 +82,14 @@ const updateUser = async (user, data) => {
         "Content-Type": "application/json",
         "x-access-token": user.token,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(updateData),
     });
-    return res.json();
+
+    const data = await res.json();
+    return data;
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    throw err;
   }
 };
 
