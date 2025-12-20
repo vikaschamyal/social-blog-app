@@ -8,6 +8,7 @@ import {
   Paper,
   InputAdornment,
   IconButton,
+  Divider,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
@@ -25,6 +26,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const SignupView = () => {
   const navigate = useNavigate();
+
   const [serverError, setServerError] = useState("");
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -39,11 +41,34 @@ const SignupView = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validate = () => {
+    const errors = {};
+
+    if (!isLength(formData.username, { min: 6, max: 30 })) {
+      errors.username = "Username must be 6–30 characters";
+    }
+
+    if (contains(formData.username, " ")) {
+      errors.username = "Username must not contain spaces";
+    }
+
+    if (!isEmail(formData.email)) {
+      errors.email = "Enter a valid email address";
+    }
+
+    if (!isLength(formData.password, { min: 8 })) {
+      errors.password = "Password must be at least 8 characters";
+    }
+
+    setErrors(errors);
+    return errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const errors = validate();
-    if (Object.keys(errors).length !== 0) return;
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length) return;
 
     const data = await signup(formData);
 
@@ -55,116 +80,123 @@ const SignupView = () => {
     }
   };
 
-  const validate = () => {
-    const errors = {};
-
-    if (!isLength(formData.username, { min: 6, max: 30 })) {
-      errors.username = "Must be between 6 and 30 characters long";
-    }
-
-    if (contains(formData.username, " ")) {
-      errors.username = "Must not contain spaces";
-    }
-
-    if (!isLength(formData.password, { min: 8 })) {
-      errors.password = "Must be at least 8 characters long";
-    }
-
-    if (!isEmail(formData.email)) {
-      errors.email = "Must be a valid email address";
-    }
-
-    setErrors(errors);
-    return errors;
-  };
-
   return (
     <Container maxWidth="sm">
       <Paper
-        elevation={6}
+        elevation={0}
         sx={{
+          mt: 10,
           p: 4,
-          mt: 8,
-          borderRadius: 3,
-          backgroundColor: "background.paper",
+          borderRadius: 4,
+          border: "1px solid rgba(0,0,0,0.08)",
         }}
       >
-        <Stack alignItems="center" spacing={2}>
-          <Typography variant="h4" fontWeight="bold">
+        {/* Header */}
+        <Stack spacing={1.2} alignItems="center">
+          <Typography variant="h4" fontWeight={700}>
             ChatLog
           </Typography>
-          <Typography variant="h6" color="text.secondary">
-            Create your account 🚀
+
+          <Typography variant="body1" color="text.secondary">
+            Create your account
           </Typography>
+
           <Typography variant="body2" color="text.secondary">
             Already have an account?{" "}
-            <Link to="/login" style={{ textDecoration: "none" }}>
-              Login
+            <Link
+              to="/login"
+              style={{
+                textDecoration: "none",
+                fontWeight: 600,
+              }}
+            >
+              Log in
             </Link>
           </Typography>
         </Stack>
 
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Divider sx={{ my: 3 }} />
+
+        {/* Form */}
+        <Box component="form" onSubmit={handleSubmit}>
           <TextField
-            label="Username"
             fullWidth
-            margin="normal"
             required
+            label="Username"
             name="username"
+            margin="normal"
             onChange={handleChange}
             error={!!errors.username}
             helperText={errors.username}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <PersonIcon color="action" />
+                  <PersonIcon fontSize="small" color="action" />
                 </InputAdornment>
               ),
             }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
           />
+
           <TextField
-            label="Email Address"
             fullWidth
-            margin="normal"
             required
+            label="Email address"
             name="email"
+            margin="normal"
             onChange={handleChange}
             error={!!errors.email}
             helperText={errors.email}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <EmailIcon color="action" />
+                  <EmailIcon fontSize="small" color="action" />
                 </InputAdornment>
               ),
             }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
           />
+
           <TextField
-            label="Password"
             fullWidth
-            margin="normal"
             required
+            label="Password"
             name="password"
             type={showPassword ? "text" : "password"}
+            margin="normal"
             onChange={handleChange}
             error={!!errors.password}
             helperText={errors.password}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <LockIcon color="action" />
+                  <LockIcon fontSize="small" color="action" />
                 </InputAdornment>
               ),
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
                     edge="end"
+                    size="small"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
             }}
           />
 
@@ -179,12 +211,19 @@ const SignupView = () => {
             fullWidth
             variant="contained"
             size="large"
-            sx={{ mt: 3, py: 1.5, borderRadius: 2 }}
+            sx={{
+              mt: 3,
+              py: 1.4,
+              borderRadius: 2,
+              fontWeight: 600,
+              textTransform: "none",
+            }}
           >
-            Sign Up
+            Sign up
           </Button>
         </Box>
 
+        {/* Footer */}
         <Box sx={{ mt: 4, textAlign: "center" }}>
           <Copyright />
         </Box>

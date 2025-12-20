@@ -8,13 +8,13 @@ import {
   Paper,
   InputAdornment,
   IconButton,
+  Divider,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../api/users";
 import { loginUser } from "../../helpers/authHelper";
-import ErrorAlert from "../ErrorAlert";
 import Copyright from "../Copyright";
 
 import EmailIcon from "@mui/icons-material/Email";
@@ -40,8 +40,6 @@ const LoginView = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("📤 Logging in with:", formData);
-
     const data = await login(formData);
     if (data.error) {
       setServerError(data.error);
@@ -54,57 +52,75 @@ const LoginView = () => {
   return (
     <Container maxWidth="sm">
       <Paper
-        elevation={6}
+        elevation={0}
         sx={{
-          p: 4,
           mt: 10,
-          borderRadius: 3,
-          backgroundColor: "background.paper",
+          p: 4,
+          borderRadius: 4,
+          border: "1px solid rgba(0,0,0,0.08)",
         }}
       >
-        <Stack alignItems="center" spacing={2}>
-          <Typography variant="h4" fontWeight="bold" gutterBottom>
+        {/* Header */}
+        <Stack spacing={1.2} alignItems="center">
+          <Typography variant="h4" fontWeight={700}>
             ChatLog
           </Typography>
-          <Typography variant="h6" color="text.secondary">
-            Welcome back 👋
+
+          <Typography variant="body1" color="text.secondary">
+            Welcome back
           </Typography>
+
           <Typography variant="body2" color="text.secondary">
             Don’t have an account?{" "}
-            <Link to="/signup" style={{ textDecoration: "none" }}>
-              Sign Up
+            <Link
+              to="/signup"
+              style={{
+                textDecoration: "none",
+                fontWeight: 600,
+              }}
+            >
+              Sign up
             </Link>
           </Typography>
         </Stack>
 
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Divider sx={{ my: 3 }} />
+
+        {/* Form */}
+        <Box component="form" onSubmit={handleSubmit}>
           <TextField
-            label="Email Address"
             fullWidth
-            margin="normal"
             required
+            label="Email address"
             name="email"
+            margin="normal"
             onChange={handleChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <EmailIcon color="action" />
+                  <EmailIcon fontSize="small" color="action" />
                 </InputAdornment>
               ),
             }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
           />
+
           <TextField
-            label="Password"
             fullWidth
             required
-            margin="normal"
+            label="Password"
             name="password"
             type={showPassword ? "text" : "password"}
+            margin="normal"
             onChange={handleChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <LockIcon color="action" />
+                  <LockIcon fontSize="small" color="action" />
                 </InputAdornment>
               ),
               endAdornment: (
@@ -112,11 +128,17 @@ const LoginView = () => {
                   <IconButton
                     edge="end"
                     onClick={() => setShowPassword(!showPassword)}
+                    size="small"
                   >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
             }}
           />
 
@@ -131,12 +153,19 @@ const LoginView = () => {
             fullWidth
             variant="contained"
             size="large"
-            sx={{ mt: 3, py: 1.5, borderRadius: 2 }}
+            sx={{
+              mt: 3,
+              py: 1.4,
+              borderRadius: 2,
+              fontWeight: 600,
+              textTransform: "none",
+            }}
           >
-            Login
+            Log in
           </Button>
         </Box>
 
+        {/* Footer */}
         <Box sx={{ mt: 4, textAlign: "center" }}>
           <Copyright />
         </Box>
