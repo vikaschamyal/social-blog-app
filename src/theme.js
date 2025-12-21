@@ -4,16 +4,16 @@ const professionalTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#7C3AED", // Violet accent
+      main: "#1c0f3b", 
       contrastText: "#FFFFFF",
     },
     secondary: {
-      main: "#22A39F", // Teal accent
+      main: "#1c0f3b", 
       contrastText: "#FFFFFF",
     },
     background: {
-      default: "#F4F1EB", // Soft beige background
-      paper: "#FFFFFF", // White cards
+      default: "#1c0f3b", 
+      paper: "#FFFFFF",
     },
     text: {
       primary: "#2C2C2C", // Charcoal
@@ -65,13 +65,15 @@ const professionalTheme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          backgroundColor: "#F4F1EB",
+          background: "radial-gradient(circle, rgba(217, 130, 162, 1) 0%, rgba(148, 187, 233, 1) 100%)",
           scrollbarColor: "#C1BDB6 transparent",
+    
           "&::-webkit-scrollbar": {
             width: 8,
           },
           "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#C1BDB6",
+            backgroundColor:"#1c0f3b",
+            
             borderRadius: 8,
           },
         },

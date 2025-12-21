@@ -269,7 +269,7 @@ const Navbar = () => {
 
           <Divider sx={{ mb: 2 }} />
 
-          <Box component="form" onSubmit={handleSearchSubmit} sx={{ mt: 4, mb: 3 }}>
+          {/* <Box component="form" onSubmit={handleSearchSubmit} sx={{ mt: 4, mb: 3 }}>
             <TextField
               fullWidth
               size="small"
@@ -284,7 +284,7 @@ const Navbar = () => {
                 ),
               }}
             />
-          </Box>
+          </Box> */}
 
           <List sx={{ flexGrow: 1 }}>
             {navItems.map((item) => (

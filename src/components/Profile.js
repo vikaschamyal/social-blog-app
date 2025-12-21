@@ -28,14 +28,14 @@ const Profile = (props) => {
     }
   }, [props.profile]);
 
-  // Local video (placed in public/videos/banner.mp4)
+  
   const bgVideo = "/videos/banner.mp4";
 
   return (
     <Card
       elevation={4}
       sx={{
-        borderRadius: 1, // 16px
+        borderRadius: 1,
         overflow: "hidden",
         mb: 4,
         backgroundColor: "background.paper",
@@ -54,7 +54,7 @@ const Profile = (props) => {
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                borderRadius: "13px", // same as Card radius
+                borderRadius: "13px", 
               }}
             >
               <source src={bgVideo} type="video/mp4" />
