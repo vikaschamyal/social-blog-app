@@ -4,15 +4,15 @@ const professionalTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#1c0f3b", 
+      main: "#Black", 
       contrastText: "#FFFFFF",
     },
     secondary: {
-      main: "#1c0f3b", 
+      main: "#Black", 
       contrastText: "#FFFFFF",
     },
     background: {
-      default: "#1c0f3b", 
+      default: "Black", 
       paper: "#FFFFFF",
     },
     text: {
@@ -45,7 +45,7 @@ const professionalTheme = createTheme({
     body1: {
       fontSize: "1rem",
       lineHeight: 1.7,
-      color: "#5C5C5C",
+      color: "#Black",
       marginBottom: "1rem",
     },
     button: {
@@ -65,8 +65,8 @@ const professionalTheme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          background: "radial-gradient(circle, rgba(217, 130, 162, 1) 0%, rgba(148, 187, 233, 1) 100%)",
-          scrollbarColor: "#C1BDB6 transparent",
+          background: "#BABABA",
+          scrollbarColor: "#008080 transparent",
     
           "&::-webkit-scrollbar": {
             width: 8,
@@ -89,7 +89,7 @@ const professionalTheme = createTheme({
           transition: "all 0.25s ease",
           background: "#FFFFFF",
           padding: "1.5rem", // consistent section padding
-          marginBottom: "1.5rem", // ✅ spacing between cards
+          marginBottom: "1.5rem", //  spacing between cards
           "&:hover": {
             transform: "translateY(-2px)",
             boxShadow: "0 8px 22px rgba(0,0,0,0.08)",
@@ -134,7 +134,7 @@ const professionalTheme = createTheme({
           border: "2px solid #F4F1EB",
           boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
           width: 44,
-          height: 44, // ✅ consistent avatar sizing
+          height: 44, //  consistent avatar sizing
         },
       },
     },
@@ -144,7 +144,7 @@ const professionalTheme = createTheme({
         root: {
           borderRadius: 12,
           padding: "12px 18px", // balanced spacing
-          marginBottom: "6px", // ✅ spacing between list items
+          marginBottom: "6px", // spacing between list items
           "&.Mui-selected": {
             backgroundColor: "rgba(124,58,237,0.08)",
             color: "#6D28D9",
@@ -156,7 +156,7 @@ const professionalTheme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          marginBottom: "1.25rem", // ✅ bigger spacing between inputs
+          marginBottom: "1.25rem", //  bigger spacing between inputs
         },
       },
     },
@@ -165,7 +165,7 @@ const professionalTheme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 12,
-          padding: "10px 14px", // ✅ touch-friendly
+          padding: "10px 14px", // touch-friendly
         },
       },
     },
