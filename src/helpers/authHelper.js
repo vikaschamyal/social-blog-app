@@ -15,3 +15,8 @@ const logoutUser = () => {
 };
 
 export { loginUser, isLoggedIn, logoutUser };
+
+export const getToken = () => {
+  return localStorage.getItem("token"); // returns the logged-in user's token
+};
+

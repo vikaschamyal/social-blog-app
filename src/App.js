@@ -7,12 +7,7 @@ import "react-icons/bs";
 import "react-router-dom";
 import { CssBaseline, Box } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 
 import theme from "./theme";
 
@@ -31,6 +26,8 @@ import AboutSettings from "./components/views/AboutSettings";
 import ContactSettings from "./components/views/ContactSettings";
 import DeveloperSettings from "./components/views/DeveloperSettings";
 import UserProfileSettings from "./components/views/UserProfileSettings";
+
+import JournalView from "./components/views/JournalView";
 
 import Footer from "./components/Footer"; // 👈 import Footer
 
@@ -70,14 +67,7 @@ function AppContent() {
           <Route path="/users/:id" element={<ProfileView />} />
           <Route path="/login" element={<LoginView />} />
           <Route path="/signup" element={<SignupView />} />
-          <Route
-            path="/about"
-            element={
-              
-                <AboutSettings />
-
-            }
-          />
+          <Route path="/about" element={<AboutSettings />} />
 
           <Route
             path="/games"
@@ -96,7 +86,7 @@ function AppContent() {
               </PrivateRoute>
             }
           />
-          
+
           <Route
             path="/settings/contact"
             element={
@@ -118,6 +108,14 @@ function AppContent() {
             element={
               <PrivateRoute>
                 <UserProfileSettings />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/journal"
+            element={
+              <PrivateRoute>
+                <JournalView />
               </PrivateRoute>
             }
           />

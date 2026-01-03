@@ -31,6 +31,7 @@ import {
   Menu as MenuIcon,
   Close as CloseIcon,
   Info as InfoIcon,
+  Book as BookIcon,
 } from "@mui/icons-material";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { isLoggedIn, logoutUser } from "../helpers/authHelper";
@@ -71,6 +72,7 @@ const Navbar = () => {
 
   const navItems = [
     { icon: <HomeIcon />, label: "Home", path: "/" },
+    { icon: <BookIcon />, label: "Journal", path: "/journal" },
     { icon: <SportsEsportsIcon />, label: "Games", path: "/games" },
     { icon: <MailIcon />, label: "Messages", path: "/messenger" },
     { icon: <InfoIcon />, label: "About", path: "/about" },
@@ -88,23 +90,22 @@ const Navbar = () => {
         position="sticky"
         elevation={0}
         sx={{
-          backdropFilter: "blur(16px) saturate(180%)",
-          backgroundColor: "rgba(255,255,255,0.8)",
+          backdropFilter: "blur(16px)",
+          backgroundColor: "rgba(255,255,255,0.85)",
           borderBottom: "1px solid rgba(0,0,0,0.05)",
           zIndex: theme.zIndex.drawer + 1,
         }}
       >
-        <Toolbar sx={{ justifyContent: "space-between", px: { xs: 1, sm: 2, md: 4 } }}>
-          {/* Left Section: Logo & Mobile Menu */}
+        <Toolbar sx={{ justifyContent: "space-between" }}>
+          {/* LEFT */}
           <Stack direction="row" alignItems="center" spacing={1}>
             {isMobile && !showMobileSearch && (
-              <IconButton onClick={toggleDrawer} sx={{ color: "text.secondary" }}>
+              <IconButton onClick={toggleDrawer}>
                 <MenuIcon />
               </IconButton>
             )}
             {!showMobileSearch && (
               <Typography
-                variant="h6"
                 component={Link}
                 to="/"
                 sx={{
@@ -116,231 +117,107 @@ const Navbar = () => {
                   gap: 1,
                 }}
               >
-                <SportsEsportsIcon fontSize="large" />
+                <SportsEsportsIcon />
                 ChatLog
               </Typography>
             )}
           </Stack>
 
-          {/* Search Bar - Desktop */}
+          {/* SEARCH DESKTOP */}
           {!isMobile && (
-            <Box component="form" onSubmit={handleSearchSubmit} sx={{ width: "40%", maxWidth: "500px", mx: 2 }}>
+            <Box component="form" onSubmit={handleSearchSubmit} sx={{ width: "40%" }}>
               <TextField
                 fullWidth
                 size="small"
-                variant="outlined"
-                placeholder="Search posts, users..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon sx={{ color: "text.secondary" }} />
-                    </InputAdornment>
-                  ),
-                  sx: {
-                    borderRadius: 3,
-                    bgcolor: "rgba(255,255,255,0.5)",
-                    "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(0,0,0,0.08)" },
-                    "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: theme.palette.primary.light },
-                  },
-                }}
-              />
-            </Box>
-          )}
-
-          {/* Search Bar - Mobile */}
-          {isMobile && showMobileSearch && (
-            <Box component="form" onSubmit={handleSearchSubmit} sx={{ flexGrow: 1, display: "flex", alignItems: "center", mx: 1 }}>
-              <TextField
-                fullWidth
-                size="small"
-                autoFocus
-                variant="outlined"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon sx={{ color: "text.secondary" }} />
+                      <SearchIcon />
                     </InputAdornment>
                   ),
-                  endAdornment: searchQuery && (
-                    <IconButton size="small" onClick={() => setSearchQuery("")}>
-                      <CloseIcon fontSize="small" />
-                    </IconButton>
-                  ),
-                  sx: { borderRadius: 3, bgcolor: "rgba(255,255,255,0.5)" },
                 }}
               />
             </Box>
           )}
 
-          {/* Right Section: Nav Icons / Profile / Auth */}
+          {/* RIGHT */}
           <Stack direction="row" alignItems="center" spacing={1}>
-            {isMobile && !showMobileSearch && (
-              <IconButton onClick={toggleMobileSearch}>
-                <SearchIcon sx={{ color: "text.secondary" }} />
-              </IconButton>
-            )}
-
-            {!isMobile && !showMobileSearch && (
-              <>
-                {navItems.map((item) => (
+            {!isMobile &&
+              navItems.map((item) => {
+                if (item.path === "/journal" && !user) return null;
+                return (
                   <IconButton
                     key={item.label}
                     component={Link}
                     to={item.path}
                     sx={{
-                      color: location.pathname === item.path ? theme.palette.primary.main : "text.secondary",
-                      p: 1.2,
-                      borderRadius: 2,
-                      transition: "0.2s",
-                      "&:hover": {
-                        color: theme.palette.primary.main,
-                        transform: "scale(1.12)",
-                      },
+                      color:
+                        location.pathname === item.path
+                          ? theme.palette.primary.main
+                          : "text.secondary",
                     }}
                   >
                     {item.icon}
                   </IconButton>
-                ))}
+                );
+              })}
 
-                {user ? (
-                  <IconButton onClick={handleMenuOpen} sx={{ p: 0, ml: 1 }}>
-                    <UserAvatar
-                      width={38}
-                      height={38}
-                      username={user.username}
-                      sx={{ border: `2px solid ${theme.palette.primary.main}` }}
-                    />
-                  </IconButton>
-                ) : (
-                  <Stack direction="row" spacing={1}>
-                    <Button component={Link} to="/login" variant="outlined" size="small">
-                      Login
-                    </Button>
-                    <Button component={Link} to="/signup" variant="contained" size="small">
-                      Sign Up
-                    </Button>
-                  </Stack>
-                )}
-              </>
-            )}
-
-            {isMobile && showMobileSearch && (
-              <IconButton onClick={toggleMobileSearch}>
-                <CloseIcon sx={{ color: "text.secondary" }} />
+            {user ? (
+              <IconButton onClick={handleMenuOpen}>
+                <UserAvatar username={user.username} width={36} height={36} />
               </IconButton>
+            ) : (
+              <>
+                <Button component={Link} to="/login">
+                  Login
+                </Button>
+                <Button component={Link} to="/signup" variant="contained">
+                  Sign Up
+                </Button>
+              </>
             )}
           </Stack>
         </Toolbar>
       </AppBar>
 
-      {/* Profile Menu */}
+      {/* PROFILE MENU */}
       {user && (
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-          PaperProps={{ elevation: 3, sx: { borderRadius: 2, mt: 1.5, minWidth: 200 } }}
-        >
+        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
           {profileMenuItems.map((item) => (
-            <MenuItem key={item.label} onClick={item.action || (() => navigate(item.path))} sx={{ py: 1.5 }}>
-              <ListItemIcon sx={{ minWidth: 36 }}>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.label} />
+            <MenuItem
+              key={item.label}
+              onClick={item.action || (() => navigate(item.path))}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText>{item.label}</ListItemText>
             </MenuItem>
           ))}
         </Menu>
       )}
 
-      {/* Mobile Drawer */}
-      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer} sx={{ "& .MuiDrawer-paper": { width: { xs: "80%", sm: 350 } } }}>
-        <Box sx={{ p: 2, height: "100%", display: "flex", flexDirection: "column" }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-            <Typography variant="h6" sx={{ fontWeight: 700, color: theme.palette.primary.main }}>
-              Menu
-            </Typography>
-            <IconButton onClick={toggleDrawer}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
-
-          <Divider sx={{ mb: 2 }} />
-
-          {/* <Box component="form" onSubmit={handleSearchSubmit} sx={{ mt: 4, mb: 3 }}>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Box> */}
-
-          <List sx={{ flexGrow: 1 }}>
-            {navItems.map((item) => (
-              <ListItem
-                button
-                key={item.label}
-                component={Link}
-                to={item.path}
-                onClick={toggleDrawer}
-                sx={{
-                  borderRadius: 1,
-                  mb: 0.5,
-                  color: location.pathname === item.path ? theme.palette.primary.main : "text.primary",
-                  "&:hover": { backgroundColor: theme.palette.action.hover },
-                }}
-              >
-                <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.label} />
-              </ListItem>
-            ))}
+      {/* MOBILE DRAWER */}
+      <Drawer open={drawerOpen} onClose={toggleDrawer}>
+        <Box sx={{ width: 260 }}>
+          <List>
+            {navItems.map((item) => {
+              if (item.path === "/journal" && !user) return null;
+              return (
+                <ListItem
+                  button
+                  key={item.label}
+                  component={Link}
+                  to={item.path}
+                  onClick={toggleDrawer}
+                >
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.label} />
+                </ListItem>
+              );
+            })}
           </List>
-
-          <Box sx={{ mt: "auto" }}>
-            <Divider sx={{ mb: 2 }} />
-            <List>
-              {user ? (
-                profileMenuItems.map((item) => (
-                  <ListItem
-                    button
-                    key={item.label}
-                    onClick={() => {
-                      item.action ? item.action() : navigate(item.path);
-                      toggleDrawer();
-                    }}
-                    sx={{
-                      borderRadius: 1,
-                      mb: 0.5,
-                      "&:hover": { backgroundColor: theme.palette.action.hover },
-                    }}
-                  >
-                    <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.label} />
-                  </ListItem>
-                ))
-              ) : (
-                <>
-                  <ListItem button component={Link} to="/login" onClick={toggleDrawer} sx={{ borderRadius: 1, mb: 0.5, "&:hover": { backgroundColor: theme.palette.action.hover } }}>
-                    <ListItemText primary="Login" />
-                  </ListItem>
-                  <ListItem button component={Link} to="/signup" onClick={toggleDrawer} sx={{ borderRadius: 1, "&:hover": { backgroundColor: theme.palette.action.hover } }}>
-                    <ListItemText primary="Sign Up" />
-                  </ListItem>
-                </>
-              )}
-            </List>
-          </Box>
         </Box>
       </Drawer>
     </>
